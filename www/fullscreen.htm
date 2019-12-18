@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>DroidCam Video Feed</title>
+</head>
+<body>
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+<script type="text/javascript">
+var aspect = sizes[cursz][0] / sizes[cursz][1];
+var currimg = new Image(sizes[cursz][0], sizes[cursz][1]);
+currimg.src="/mjpegfeed?" + currimg.width + "x" + currimg.height;
+document.body.insertBefore(currimg,document.body.childNodes[0]);
+function adjust(inv) {
+ if (inv) {
+  feedimg.width(currimg.height);
+  feedimg.height(currimg.width);
+ } else {
+  feedimg.width(currimg.width);
+  feedimg.height(currimg.height);
+ }
+}
+function es(e) {
+  var i = e ? 64 : -64;
+  currimg.width += i;
+  currimg.height = currimg.width / aspect;
+  adjust(0);
+}
+</script>
+<button type="button" class="btn btn-default" onclick="es(0);">
+  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+</button>
+<button type="button" class="btn btn-default" onclick="es(1);">
+  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+</button>
+</body></html>
