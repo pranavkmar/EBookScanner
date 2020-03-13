@@ -2,12 +2,18 @@ import flask
 import werkzeug
 import time
 import os
+import socket
 
 app = flask.Flask(__name__)
 
 save_path = 'my_images'
 if not os.path.exists(save_path):
     os.makedirs(save_path)
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+hostName = s.getsockname()[0]
+s.close()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -21,10 +27,10 @@ def handle_request():
         filename = werkzeug.utils.secure_filename(imageFile.filename)
         print("Image Filename : " + imageFile.filename)
         timestr = time.strftime("%Y%m%d-%H%M%S")
-        imageFile.save(save_path+'/'+timestr + '_' + filename)
+        imageFile.save(save_path + '/' + timestr + '_' + filename)
         image_num = image_num + 1
     print("\n")
     return str(len(files_ids)) + " Image(s) Uploaded Successfully. Come Back Soon."
 
 
-app.run(host="0.0.0.0", port=5000, debug=True)
+app.run(host=hostName, port=5000, debug=True)
